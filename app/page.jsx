@@ -1,6 +1,9 @@
 // app/page.jsx
 'use client';
-
+import LightPillar from "@/components/LightPillar";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import React from 'react';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -28,7 +31,8 @@ if (typeof window !== 'undefined') {
 const HomePage = () => {
   const heroRef = useRef(null);
   const featuresRef = useRef(null);
-  const tasksRef = useRef(null);
+  const valueRef = useRef(null);
+
   const workflowRef = useRef(null);
 
   useEffect(() => {
@@ -67,23 +71,23 @@ const HomePage = () => {
       );
     });
 
-    // Task items animation
-    gsap.utils.toArray('.task-item').forEach((item, i) => {
-      gsap.fromTo(item,
-        { opacity: 0, x: -30 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.6,
-          delay: i * 0.1,
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse'
-          }
-        }
-      );
-    });
+   gsap.utils.toArray('.value-card').forEach((card, i) => {
+  gsap.fromTo(card,
+    { opacity: 0, y: 40 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: i * 0.15,
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse'
+      }
+    }
+  );
+});
+
 
     // Workflow steps animation
     gsap.utils.toArray('.workflow-step').forEach((step, i) => {
@@ -103,25 +107,7 @@ const HomePage = () => {
       );
     });
 
-    // Stats counter animation
-    const stats = document.querySelectorAll('.stat-number');
-    stats.forEach(stat => {
-      const target = parseInt(stat.textContent);
-      gsap.fromTo(stat,
-        { textContent: 0 },
-        {
-          textContent: target,
-          duration: 2,
-          snap: { textContent: 1 },
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: stat,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
-          }
-        }
-      );
-    });
+    
 
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
@@ -234,9 +220,26 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 text-white">
+    <div className="relative min-h-screen overflow-hidden text-white">
+      <Navbar />
+      {/* LightPillar Background */}
+    <div className="fixed inset-0 -z-10 pointer-events-none">
+    <LightPillar
+      topColor="#22d3ee"
+      bottomColor="#1e3a8a"
+      intensity={1.1}
+      glowAmount={0.006}
+      quality="medium"
+      mixBlendMode="screen"
+    />
+
+  {/* Contrast overlay */}
+  <div className="absolute inset-0 bg-black/55" />
+</div>
+
+
       {/* Hero Section */}
-      <section ref={heroRef} className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <section ref={heroRef} id="hero" className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="max-w-7xl mx-auto text-center">
           <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
@@ -260,21 +263,6 @@ const HomePage = () => {
             <button className="border border-gray-700 text-gray-300 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-800/50 transition-colors">
               View Demo
             </button>
-          </div>
-
-          {/* Stats */}
-          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-            {[
-              { value: '150+', label: 'AI Tools' },
-              { value: '280M+', label: 'Research Papers' },
-              { value: '10K+', label: 'Researchers' },
-              { value: '98%', label: 'Satisfaction' }
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="stat-number text-4xl font-bold text-teal-300">{stat.value}</div>
-                <div className="text-gray-400 mt-2">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -303,52 +291,73 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      {/* VALUE PROPOSITION SECTION */}
+<section
+  ref={valueRef}
+  id="value"
+  className="py-20 px-4 sm:px-6 lg:px-8 bg-transparent"
+>
+  <div className="max-w-7xl mx-auto">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl font-bold mb-4">
+        Why Manuscriptor for Academic Publications?
+      </h2>
+      <p className="text-gray-400 text-lg max-w-3xl mx-auto">
+        Built to automate and validate academic manuscript formatting across multiple publication standards using AI‑driven structure analysis.
 
-      {/* Tasks Section */}
-      <section ref={tasksRef} id="templates" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Start With a Research Task</h2>
-            <p className="text-gray-400 text-lg">Choose a template or describe your own task</p>
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {[
+        {
+          title: "Publication Standards Ready",
+          desc: "Supports IEEE in Stage‑1, with Springer, ACM, and others planned.",
+          icon: <BookOpen className="w-6 h-6" />,
+          color: "from-blue-500 to-cyan-500"
+        },
+        {
+          title: "AI Structure Detection",
+          desc: "Automatically identifies sections, headings, and references.",
+          icon: <Cpu className="w-6 h-6" />,
+          color: "from-purple-500 to-pink-500"
+        },
+        {
+          title: "Compliance Validation",
+          desc: "Detects and fixes formatting violations before submission.",
+          icon: <Shield className="w-6 h-6" />,
+          color: "from-green-500 to-emerald-500"
+        },
+        {
+          title: "Time Saving",
+          desc: "Reduces hours of manual formatting to minutes.",
+          icon: <Zap className="w-6 h-6" />,
+          color: "from-orange-500 to-red-500"
+        }
+      ].map((item, index) => (
+        <div
+          key={index}
+          className="value-card bg-gray-800/50 border border-gray-700 rounded-2xl p-8 hover:border-teal-500/40 transition-all"
+        >
+          <div
+            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-6`}
+          >
+            {item.icon}
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {tasks.map((task, index) => (
-              <div
-                key={index}
-                className="task-item bg-gray-800/30 border border-gray-700 rounded-xl p-6 hover:border-teal-500/30 transition-all duration-300 group cursor-pointer"
-              >
-                <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${task.gradient} flex items-center justify-center mb-4`}>
-                  {task.icon}
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{task.title}</h3>
-                <p className="text-gray-400 text-sm mb-4">{task.description}</p>
-                <div className="flex items-center text-teal-400 text-sm font-medium">
-                  Start Task
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Custom Task Input */}
-          <div className="mt-12 max-w-3xl mx-auto">
-            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-8">
-              <h3 className="text-2xl font-semibold mb-4">Build Your Custom Task</h3>
-              <div className="flex gap-4">
-                <input
-                  type="text"
-                  placeholder="Describe your research task in detail..."
-                  className="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-teal-500"
-                />
-                <button className="bg-gradient-to-r from-teal-500 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:opacity-90 transition-opacity">
-                  Run Task
-                </button>
-              </div>
-            </div>
-          </div>
+          <h3 className="text-xl font-semibold mb-3">
+            {item.title}
+          </h3>
+          <p className="text-gray-400">
+            {item.desc}
+          </p>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
+
+
+
 
       {/* Workflow Section */}
       <section ref={workflowRef} id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8">
@@ -384,7 +393,7 @@ const HomePage = () => {
       {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 border border-gray-700 rounded-3xl p-12">
+          <div className="bg-transparent rounded-3xl p-12">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Transform Your{' '}
               <span className="bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent">
@@ -406,6 +415,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

@@ -15,11 +15,10 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
+    { name: 'Home', href: '#hero' },
     { name: 'Features', href: '#features' },
+    {name: 'Why', href: '#value' },
     { name: 'How It Works', href: '#how-it-works' },
-    { name: 'Templates', href: '#templates' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'Resources', href: '#resources' },
   ];
 
   return (
